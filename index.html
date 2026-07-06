@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>日本电影高清在线观看-日剧动漫综艺纪录片资源推荐平台-东京放映局</title>
+    <meta name="keywords" content="日本电影,日本电影高清在线观看,日本日剧,日本动漫电影,日本综艺,日本纪录片,日本影视资源,高清电影推荐,日影片库,东京放映局" />
+    <meta name="description" content="东京放映局聚合日本电影、热门日剧、动漫电影、综艺纪录片与经典影像资料，提供高清海报、剧情简介、评分榜单、分类片库和多端观看推荐。" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="home">
+    <header class="cinema-header">
+      <a class="mark" href="./index.html"><strong>东京放映局</strong><span>Tokyo Screen Bureau</span></a>
+      <nav class="nav" aria-label="主导航">
+        <a class="active" href="./index.html">放映厅</a>
+        <a href="./library.html">全片库</a>
+        <a href="./library.html?kind=电影">日影馆</a>
+        <a href="./library.html?kind=日剧">剧集馆</a>
+        <a href="./library.html?kind=动漫电影">动画馆</a>
+        <a href="./library.html?kind=综艺纪录">纪实馆</a>
+        <a href="./library.html?sort=score">高分榜</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="overline">Japan Movie · Drama · Animation</p>
+          <h1>日本电影、日剧、动漫电影与纪实综艺高清推荐</h1>
+          <p>以影院排期的方式整理日本影视内容，覆盖新片、经典日影、热播日剧、动画剧场版、旅行美食和人物纪录。</p>
+          <div class="hero-actions">
+            <a class="button gold" href="./library.html">进入全片库</a>
+            <a class="button line" href="#daily">查看今日片单</a>
+          </div>
+        </div>
+        <div class="screen-card" id="mainScreen"></div>
+        <aside class="showtime">
+          <p class="overline">Now Showing</p>
+          <div id="showtimeList"></div>
+        </aside>
+      </section>
+
+      <section class="ticket-row" aria-label="频道入口">
+        <a href="./library.html?kind=电影"><span>01</span><b>日本电影</b><em>院线 / 爱情 / 犯罪 / 家庭</em></a>
+        <a href="./library.html?kind=日剧"><span>02</span><b>热门日剧</b><em>悬疑 / 生活 / 都市 / 动作</em></a>
+        <a href="./library.html?kind=动漫电影"><span>03</span><b>动漫电影</b><em>剧场版 / 奇幻 / 青春 / 运动</em></a>
+        <a href="./library.html?kind=综艺纪录"><span>04</span><b>综艺纪录</b><em>美食 / 旅行 / 人物 / 文化</em></a>
+      </section>
+
+      <section class="section split">
+        <div>
+          <div class="section-head">
+            <div><p class="overline">Curated Schedule</p><h2>本周重点放映</h2></div>
+            <a href="./library.html?sort=hot">更多热映</a>
+          </div>
+          <div class="feature-list" id="featureList"></div>
+        </div>
+        <aside class="rank">
+          <p class="overline">Top Score</p>
+          <h2>评分榜单</h2>
+          <ol id="rankList"></ol>
+        </aside>
+      </section>
+
+      <section class="section" id="daily">
+        <div class="section-head">
+          <div><p class="overline">Daily Collection</p><h2>今日精选内容</h2></div>
+          <a href="./library.html">浏览 80+ 内容</a>
+        </div>
+        <div class="poster-grid" id="homeGrid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-main">
+        <strong>东京放映局</strong>
+        <p>日本电影、日剧、动漫电影、综艺纪录片的高清资料索引与观看推荐平台。</p>
+      </div>
+      <div><h3>影视频道</h3><a href="./library.html?kind=电影">日影馆</a><a href="./library.html?kind=日剧">剧集馆</a><a href="./library.html?kind=动漫电影">动画馆</a></div>
+      <div><h3>热门类型</h3><a href="./library.html?genre=悬疑">悬疑推理</a><a href="./library.html?genre=爱情">爱情剧情</a><a href="./library.html?genre=美食">美食纪实</a></div>
+      <div><h3>版权信息</h3><p>Copyright © 2026 东京放映局. All Rights Reserved.</p><p>本站用于影视资料整理、分类检索与观影信息展示。</p></div>
+    </footer>
+    <script src="./app.js"></script>
+  </body>
+</html>

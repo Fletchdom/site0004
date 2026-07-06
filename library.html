@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>日本影视全片库-日本电影日剧动漫综艺纪录片高清在线观看索引</title>
+    <meta name="keywords" content="日本影视片库,日本电影片库,日剧片库,日本动漫电影,日本综艺纪录片,日本电影高清在线观看,日本影视分类,高清片库" />
+    <meta name="description" content="东京放映局全片库收录80+日本电影、日剧、动漫电影、综艺纪录片内容，支持按频道、类型、年份、评分和热度筛选。" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="library">
+    <header class="cinema-header">
+      <a class="mark" href="./index.html"><strong>东京放映局</strong><span>Tokyo Screen Bureau</span></a>
+      <nav class="nav" aria-label="主导航">
+        <a href="./index.html">放映厅</a>
+        <a class="active" href="./library.html">全片库</a>
+        <a href="./library.html?kind=电影">日影馆</a>
+        <a href="./library.html?kind=日剧">剧集馆</a>
+        <a href="./library.html?kind=动漫电影">动画馆</a>
+        <a href="./library.html?kind=综艺纪录">纪实馆</a>
+        <a href="./library.html?sort=score">高分榜</a>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero">
+        <p class="overline">Screen Library</p>
+        <h1>日本影视全片库</h1>
+        <p>筛选日本电影、日剧、动漫电影、综艺纪录片，按热度、评分和年份快速找到想看的内容。</p>
+      </section>
+      <section class="filters">
+        <button data-kind="全部">全部</button>
+        <button data-kind="电影">电影</button>
+        <button data-kind="日剧">日剧</button>
+        <button data-kind="动漫电影">动漫电影</button>
+        <button data-kind="综艺纪录">综艺纪录</button>
+        <select id="sortSelect" aria-label="排序">
+          <option value="hot">热度优先</option>
+          <option value="score">评分优先</option>
+          <option value="year">年份优先</option>
+        </select>
+      </section>
+      <section class="section tight">
+        <div class="section-head">
+          <div><p class="overline">Results</p><h2 id="libraryTitle">全部内容</h2></div>
+          <span class="count" id="resultCount">0 条</span>
+        </div>
+        <div class="poster-grid" id="libraryGrid"></div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="footer-main"><strong>东京放映局</strong><p>日本影视资料索引与高清观看推荐。</p></div>
+      <div><h3>频道</h3><a href="./library.html?kind=电影">日本电影</a><a href="./library.html?kind=日剧">热门日剧</a></div>
+      <div><h3>榜单</h3><a href="./library.html?sort=score">高分榜</a><a href="./library.html?sort=year">新片新剧</a></div>
+      <div><h3>版权</h3><p>Copyright © 2026 东京放映局. All Rights Reserved.</p></div>
+    </footer>
+    <script src="./app.js"></script>
+  </body>
+</html>
