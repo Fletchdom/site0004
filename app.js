@@ -100,24 +100,29 @@ function fallbackPoster(item) {
 }
 
 function imageTag(item, className = "") {
-  return `<img ${className ? `class="${className}"` : ""} src="${escapeAttr(item.poster)}" data-fallback="${escapeAttr(fallbackPoster(item))}" alt="${escapeAttr(item.title)}" loading="eager">`;
+  return `<img ${className ? `class="${className}"` : ""} src="${escapeAttr(fallbackPoster(item))}" data-real="${escapeAttr(item.poster)}" alt="${escapeAttr(item.title)}" loading="eager">`;
 }
 
 function hydrateImages() {
   const imgs = [...document.images];
   imgs.forEach((img) => {
-    const swap = () => {
-      if (img.dataset.fallback && img.src !== img.dataset.fallback) img.src = img.dataset.fallback;
+    if (!img.dataset.real) return;
+    const real = new Image();
+    let done = false;
+    const timer = setTimeout(() => {
+      done = true;
+    }, 1800);
+    real.onload = () => {
+      if (done || real.naturalWidth === 0) return;
+      clearTimeout(timer);
+      img.src = img.dataset.real;
     };
-    img.addEventListener("error", swap, { once: true });
+    real.onerror = () => {
+      done = true;
+      clearTimeout(timer);
+    };
+    real.src = img.dataset.real;
   });
-  setTimeout(() => {
-    imgs.forEach((img) => {
-      if (!img.complete || img.naturalWidth === 0 || img.naturalHeight === 0) {
-        if (img.dataset.fallback && img.src !== img.dataset.fallback) img.src = img.dataset.fallback;
-      }
-    });
-  }, 2600);
 }
 
 function fromRow(row) {
