@@ -70,6 +70,56 @@ let items = [
   })
 ];
 
+function escapeAttr(value) {
+  return String(value || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+}
+
+function fallbackPoster(item) {
+  const palettes = {
+    "电影": ["#1b1110", "#e8b650", "#c74332"],
+    "日剧": ["#10151d", "#67b58b", "#e8b650"],
+    "动漫电影": ["#111327", "#8bb7ff", "#f29cc2"],
+    "综艺纪录": ["#132018", "#95d78a", "#e8b650"]
+  };
+  const [bg, main, sub] = palettes[item.kind] || palettes["电影"];
+  const title = String(item.title || "日本影视").slice(0, 12);
+  const genre = String(item.genre || item.kind || "高清推荐").slice(0, 8);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="960" viewBox="0 0 640 960">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${bg}"/><stop offset="1" stop-color="#070504"/></linearGradient></defs>
+    <rect width="640" height="960" fill="url(#g)"/>
+    <rect x="42" y="42" width="556" height="876" rx="22" fill="none" stroke="${main}" stroke-width="6"/>
+    <rect x="76" y="96" width="488" height="90" rx="10" fill="${main}" opacity=".16"/>
+    <text x="88" y="150" fill="${main}" font-size="34" font-family="Arial, sans-serif" font-weight="700">TOKYO SCREEN</text>
+    <text x="88" y="418" fill="#fff8e8" font-size="58" font-family="Microsoft YaHei, Arial, sans-serif" font-weight="800">${title}</text>
+    <text x="88" y="494" fill="${main}" font-size="34" font-family="Microsoft YaHei, Arial, sans-serif">${genre} · ${item.year || 2026}</text>
+    <circle cx="482" cy="690" r="82" fill="${sub}" opacity=".9"/>
+    <circle cx="482" cy="690" r="34" fill="${bg}" opacity=".88"/>
+    <text x="88" y="820" fill="#fff8e8" font-size="30" font-family="Arial, sans-serif" font-weight="700">${item.kind || "日本影视"}</text>
+  </svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function imageTag(item, className = "") {
+  return `<img ${className ? `class="${className}"` : ""} src="${escapeAttr(item.poster)}" data-fallback="${escapeAttr(fallbackPoster(item))}" alt="${escapeAttr(item.title)}" loading="eager">`;
+}
+
+function hydrateImages() {
+  const imgs = [...document.images];
+  imgs.forEach((img) => {
+    const swap = () => {
+      if (img.dataset.fallback && img.src !== img.dataset.fallback) img.src = img.dataset.fallback;
+    };
+    img.addEventListener("error", swap, { once: true });
+  });
+  setTimeout(() => {
+    imgs.forEach((img) => {
+      if (!img.complete || img.naturalWidth === 0 || img.naturalHeight === 0) {
+        if (img.dataset.fallback && img.src !== img.dataset.fallback) img.src = img.dataset.fallback;
+      }
+    });
+  }, 2600);
+}
+
 function fromRow(row) {
   const [id, title, originalTitle, kind, year, score, genre, poster] = row;
   return {
@@ -132,7 +182,7 @@ function unique(list) {
 function card(item) {
   return `<article class="poster-card">
     <a href="./movie.html?id=${encodeURIComponent(item.id)}">
-      <div class="poster"><img src="${item.poster}" alt="${item.title}" loading="lazy"><span>${item.kind}</span></div>
+      <div class="poster">${imageTag(item)}<span>${item.kind}</span></div>
       <div class="poster-info">
         <h3>${item.title}</h3>
         <p>${item.originalTitle}</p>
@@ -144,7 +194,7 @@ function card(item) {
 
 function row(item) {
   return `<a class="feature" href="./movie.html?id=${encodeURIComponent(item.id)}">
-    <img src="${item.poster}" alt="${item.title}" loading="lazy">
+    ${imageTag(item)}
     <span><b>${item.title}</b><small>${item.kind} · ${item.genre} · ${item.year}</small></span>
     <em>${item.score}</em>
   </a>`;
@@ -153,7 +203,7 @@ function row(item) {
 function renderHome() {
   const hot = [...items].sort((a, b) => b.hot - a.hot);
   const first = hot[0];
-  document.getElementById("mainScreen").innerHTML = `<a href="./movie.html?id=${first.id}"><img src="${first.poster}" alt="${first.title}"><span><b>${first.title}</b><em>${first.kind} / ${first.score}</em></span></a>`;
+  document.getElementById("mainScreen").innerHTML = `<a href="./movie.html?id=${first.id}">${imageTag(first)}<span><b>${first.title}</b><em>${first.kind} / ${first.score}</em></span></a>`;
   document.getElementById("showtimeList").innerHTML = hot.slice(1, 6).map(row).join("");
   document.getElementById("featureList").innerHTML = hot.filter((item) => item.kind !== "动漫电影").slice(0, 7).map(row).join("");
   document.getElementById("rankList").innerHTML = [...items].sort((a, b) => b.score - a.score).slice(0, 9).map((item) => `<li><a href="./movie.html?id=${item.id}"><span>${item.title}</span><b>${item.score}</b></a></li>`).join("");
@@ -195,7 +245,7 @@ function renderDetail() {
   document.title = `${item.title}-${item.kind}高清在线观看资料-东京放映局`;
   document.querySelector("meta[name='description']").setAttribute("content", item.summary);
   document.getElementById("detailRoot").innerHTML = `
-    <div class="detail-poster"><img src="${item.poster}" alt="${item.title}"></div>
+    <div class="detail-poster">${imageTag(item)}</div>
     <article class="detail-copy">
       <p class="overline">${item.kind} / ${item.genre}</p>
       <h1>${item.title}</h1>
@@ -212,6 +262,7 @@ function render() {
   if (page === "home") renderHome();
   if (page === "library") renderLibrary();
   if (page === "detail") renderDetail();
+  hydrateImages();
 }
 
 enrich();
