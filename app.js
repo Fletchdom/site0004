@@ -100,7 +100,7 @@ function fallbackPoster(item) {
 }
 
 function imageTag(item, className = "") {
-  return `<img ${className ? `class="${className}"` : ""} src="${escapeAttr(fallbackPoster(item))}" data-real="${escapeAttr(item.poster)}" alt="${escapeAttr(item.title)}" loading="eager">`;
+  return `<img ${className ? `class="${className}"` : ""} src="./posters/${escapeAttr(item.id)}.svg" data-real="${escapeAttr(item.poster)}" alt="${escapeAttr(item.title)}" loading="eager">`;
 }
 
 function hydrateImages() {
@@ -135,42 +135,7 @@ function fromRow(row) {
 }
 
 async function enrich() {
-  try {
-    const [anime, drama] = await Promise.all([
-      fetch("https://api.jikan.moe/v4/top/anime?type=movie&page=3").then((res) => res.json()),
-      fetch("https://api.tvmaze.com/search/shows?q=Tokyo").then((res) => res.json())
-    ]);
-    const animeItems = (anime.data || []).slice(0, 14).map((entry) => ({
-      id: `anime-${entry.mal_id}`,
-      title: entry.title_english || entry.title,
-      originalTitle: entry.title_japanese || entry.title,
-      kind: "动漫电影",
-      year: entry.aired?.prop?.from?.year || 2026,
-      score: Number(entry.score || 8).toFixed(1),
-      genre: entry.genres?.[0]?.name || "动画",
-      poster: entry.images?.jpg?.large_image_url || entry.images?.jpg?.image_url,
-      hot: Number(entry.members || 50000),
-      summary: `${entry.title_english || entry.title}提供真实动画电影海报、评分、年份和类型信息，可作为日本动漫电影高清观看推荐与片库索引内容。`
-    }));
-    const dramaItems = (drama || []).slice(0, 10).map((result) => {
-      const show = result.show;
-      return {
-        id: `drama-${show.id}`,
-        title: show.name,
-        originalTitle: show.name,
-        kind: "日剧",
-        year: Number(String(show.premiered || "2026").slice(0, 4)) || 2026,
-        score: Number(show.rating?.average || 7.5).toFixed(1),
-        genre: show.genres?.[0] || "剧情",
-        poster: show.image?.original || show.image?.medium,
-        hot: Number(show.weight || 80) * 120,
-        summary: `${show.name}收录真实剧集资料、海报、评分和剧情介绍，适合日剧在线观看、高清剧集推荐和日本影视片库页面展示。`
-      };
-    }).filter((item) => item.poster);
-    items = unique([...animeItems, ...dramaItems, ...items]).slice(0, 110);
-  } catch {
-    items = items.slice(0, 94);
-  }
+  items = items.slice(0, 94);
   render();
 }
 
